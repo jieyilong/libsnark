@@ -283,7 +283,7 @@ Fetch dependencies from their GitHub repos.
 
     $ git submodule init && git submodule update
    
-**Note**: If `git submodule update` times out, we can simply `git clone` the required repos under the `depends` folder. For example:
+**Note**: If `git submodule update` times out, we can manually `git clone` the required repos under the `depends` folder. For example:
 
 ```shell
 cd depends
