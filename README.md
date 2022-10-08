@@ -343,11 +343,11 @@ To compile and run the tests for this library, run:
     
 **Note for MacOS**: If compilation fails with `openssl/*.h` not found error, try the following:
 
-    ```shell
-    cd /usr/local/include
-    ln -s ../opt/openssl/include/openssl . 
-    make check
-    ```
+    
+    $ cd /usr/local/include
+    $ ln -s ../opt/openssl/include/openssl . 
+    $ make check
+    
 
 For faster build times you might also consider ccache from `ccache` package and using Ninja build system from `ninja-build` package. For the latter CMake invocation above becomes `cmake -GNinja ..`; and instead of `make`/`make check`/etc you should run `ninja`/`ninja check`/etc.
 
