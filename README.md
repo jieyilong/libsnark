@@ -279,13 +279,53 @@ Concretely, here are the requisite packages in some Linux distributions:
 
 ### Building
 
-Fetch dependencies from their GitHub repos:
+Fetch dependencies from their GitHub repos.
 
     $ git submodule init && git submodule update
+   
+**Note**: If `git submodule update` times out, we can simply `git clone` the required repos under the `depends` folder. For example:
+
+```shell
+cd depends
+
+rm -rf ate-pairing
+git clone https://github.com/herumi/ate-pairing
+
+rm -rf libff
+git clone https://github.com/scipr-lab/libff
+
+rm -rf libfqfft
+git clone https://github.com/scipr-lab/libfqfft
+
+rm -rf libsnark-supercop
+git clone https://github.com/mbbarbosa/libsnark-supercop
+
+rm -rf xbyak
+git clone https://github.com/herumi/xbyak
+
+rm -rf gtest
+git clone https://github.com/google/googletest 
+mv googletest gtest
+
+git submodule init && git submodule update
+```
+
 
 Create the Makefile:
 
     $ mkdir build && cd build && cmake ..
+    
+**Note for MacOS**: First install GMP from MacPorts (`port install gmp`). Then run the following:
+
+```shell
+LD_LIBRARY_PATH=/usr/local/opt/openssl/lib:"${LD_LIBRARY_PATH}"                    
+CPATH=/usr/local/opt/openssl/include:"${CPATH}"                                    
+PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig:"${PKG_CONFIG_PATH}"          
+export LD_LIBRARY_PATH CPATH PKG_CONFIG_PATH       
+
+mkdir build && cd build && CPPFLAGS=-I/usr/local/opt/openssl/include LDFLAGS=-L/usr/local/opt/openssl/lib PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig cmake -DWITH_PROCPS=OFF -DWITH_SUPERCOP=OFF ..
+```
+
 
 Then, to compile the library, tests, and profiling harness, run this within the `build` directory:
 
@@ -323,7 +363,7 @@ Install Cygwin using the graphical installer, including the `g++`, `libgmp`, `cm
 and `git` packages. Then disable the dependencies not easily supported under CygWin,
 using:
 
-    $ cmake -DWITH_PROCPS=OFF ..
+
 
 ### Building on Mac OS X
 
@@ -335,8 +375,16 @@ dependencies not easily supported under OS X, using:
 MacPorts does not write its libraries into standard system folders, so you
 might need to explicitly provide the paths to the header files and libraries by
 appending `CXXFLAGS=-I/opt/local/include LDFLAGS=-L/opt/local/lib` to the line
-above.
+above. See the complete instructions below:
 
+```shell
+LD_LIBRARY_PATH=/usr/local/opt/openssl/lib:"${LD_LIBRARY_PATH}"                    
+CPATH=/usr/local/opt/openssl/include:"${CPATH}"                                    
+PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig:"${PKG_CONFIG_PATH}"          
+export LD_LIBRARY_PATH CPATH PKG_CONFIG_PATH       
+
+CPPFLAGS=-I/usr/local/opt/openssl/include LDFLAGS=-L/usr/local/opt/openssl/lib PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig cmake -DWITH_PROCPS=OFF -DWITH_SUPERCOP=OFF ..
+```
 
 --------------------------------------------------------------------------------
 Build options
